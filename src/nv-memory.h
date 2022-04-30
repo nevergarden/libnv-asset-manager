@@ -14,7 +14,7 @@ typedef enum nv_memory_status_t {
  * it's size should be page aligned.
  */
 typedef struct nv_memory_block_t {
-  void * position;
+  void * data;
   uint32_t size;
 } nv_memory_block_t;
 

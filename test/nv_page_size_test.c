@@ -1,26 +1,35 @@
 #include <nv-memory.h>
 #include <unistd.h>
+#include <assert.h>
+#include <string.h>
 #include <stdio.h>
 
 int main() {
   long page_size = sysconf(_SC_PAGESIZE);
 
-  nv_memory_block_t block;
-  nv_malloc(10, &block);
-  if(block.size % page_size != 0 && block.size == 0)
-    return -1;
-  nv_free(&block);
+  // Test 1: Normal check to see if we have memory block
+  nv_memory_block_t block1;
+  assert(nv_malloc(15, &block1) == ok);
+  assert(block1.size == 15);
+  nv_free(&block1);
 
-  if(nv_malloc(0, &block) != bad_allocation)
-    return -1;
-  if(block.size != 0)
-    return -1;
-  nv_free(&block);
+  // Test 2: allocation of size zero must fail
+  nv_memory_block_t block2;
+  assert(nv_malloc(0, &block2) == bad_allocation);
 
-  nv_malloc(page_size, &block);
-  printf("%d\n", block.size);
-  if(block.size != page_size)
-    return -1;
+  // Test 3: allocate more than a page
+  nv_memory_block_t block3;
+  assert(nv_malloc(page_size+1, &block3) == ok);
+  assert(block3.size == page_size+1);
+  nv_free(&block3);
+
+  // Test 4: check memory freed and no memory leak
+  nv_memory_block_t block4;
+  assert(nv_malloc(12, &block4) == ok);
+  strcpy(block4.data, "Hello World");
+  assert(block4.size == 12);
+  nv_free(&block4);
+  assert(block4.size == 0);
 
   return 0;
 }

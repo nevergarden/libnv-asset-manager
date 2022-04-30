@@ -1,0 +1,4 @@
+[2022-04-30]
+* get_page_size functions for linux/windows systems.
+* nv_malloc and nv_free function added.
+* tests for nv_malloc and nv_free added.

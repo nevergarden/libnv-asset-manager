@@ -1,3 +1,8 @@
 [2022-04-30]
 [x] write tests
 [ ] test Windows memory alignment API
+
+[2022-05-02]
+[ ] move map into the block if possible
+[ ] write doxygen documentation
+[ ] write some manual memory allocations suited for game

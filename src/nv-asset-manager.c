@@ -1,4 +1,4 @@
-#include "nv-memory.h"
+#include "nv-asset-manager.h"
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -26,12 +26,19 @@ static inline uint32_t get_page_size() {
 #endif
 }
 
-void nv_init_asset_map(nv_memory_block_t * block, nv_asset_map_t * map) {
+nv_asset_map_t * nv_init_asset_map(nv_memory_block_t * block) {
+  nv_asset_map_t * map = malloc(sizeof(nv_asset_map_t));
   map->block = block;
   map->count = 0;
+  map->map = NULL;
+  return map;
 }
 
-#include <stdio.h>
+void nv_free_asset_map(nv_asset_map_t * map) {
+  free(map->map);
+  free(map);
+}
+
 int32_t nv_asset_manager_push(nv_memory_block_t * block,
     nv_asset_map_t * map, const char * data, size_t data_len) {
   if(data_len+sizeof(size_t) > block->remaining) return -1;
@@ -46,12 +53,11 @@ int32_t nv_asset_manager_push(nv_memory_block_t * block,
   strncpy(block->data+block->top, data, data_len);
   block->top+=data_len;
   block->remaining -= (data_len+sizeof(size_t));
-  printf("%d\n", block->remaining);
   return map->count-1;
 }
 
 void nv_asset_manager_get(nv_memory_block_t * block, nv_asset_map_t * map, uint32_t asset_id, nv_asset_block_t * ret) {
-  if(map->block != block) return;
+  if(map->block != block) return; // TODO: fix and return error values
   
   uint32_t top = *(map->map+asset_id);
   size_t size = *(block->data+top);

@@ -1,4 +1,4 @@
-#include <nv-memory.h>
+#include <nv-asset-manager.h>
 #include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -9,7 +9,7 @@ int main() {
   nv_memory_block_t block;
   assert(nv_malloc(100, &block) == ok);
 
-  nv_asset_map_t * map = init_asset_map(&block);
+  nv_asset_map_t * map = nv_init_asset_map(&block);
 
   char * hello = "Hello ";
   uint32_t hello_id = nv_asset_manager_push(&block, map, hello, strlen(hello));
@@ -31,6 +31,6 @@ int main() {
   assert(block.remaining == 100);
   assert(block.top == 0);
 
-  free_asset_map(map);
+  nv_free_asset_map(map);
   nv_free(&block);
 }

@@ -5,9 +5,7 @@ target_link_libraries(nv_page_size_test PUBLIC nv-asset-manager)
 add_executable(nv_asset_test nv_asset_test.c)
 target_link_libraries(nv_asset_test PUBLIC nv-asset-manager)
 
-set(RESOURCE_FILES test_rgba.png)
-add_executable(nv_texture_test
-  nv_texture_test.c
-  ${RESOURCE_FILES})
+add_executable(nv_texture_test nv_texture_test.c)
 target_link_libraries(nv_texture_test PUBLIC nv-asset-manager)
-set_target_properties(nv_texture_test PROPERTIES RESOURCE "${RESOURCE_FILES}")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/test_rgba.png ${CMAKE_CURRENT_BINARY_DIR}/test_rgba.png COPYONLY)
+install(DIRECTORY res/ DESTINATION res)

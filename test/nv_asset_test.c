@@ -25,7 +25,7 @@ int main() {
 
   nv_asset_manager_pop(&block, map);
   int32_t hello_size = (int32_t) strlen(hello);
-  int32_t size_t_size = (int32_t) sizeof(size_t);
+  int32_t size_t_size = (int32_t) sizeof(uint32_t);
   assert(block.remaining == (int32_t)(100 - hello_size - size_t_size));
   nv_asset_manager_pop(&block, map);
   assert(block.remaining == 100);
